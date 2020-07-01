@@ -19,6 +19,6 @@ const getMessage = () => {
   return `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, 2020 (Day ${daysDiff})</i>\n${URL}${month.toLowerCase()}-${day}`;
 };
 
-schedule.scheduleJob('0 7 * * *', function () {
+schedule.scheduleJob('21 12 * * *', function () {
   bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
 });
