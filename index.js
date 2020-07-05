@@ -33,6 +33,9 @@ const CHANNEL_NAME = '@chestestchannel';
 
   const bot = new Telegram(process.env.TEST_BOT_TOKEN);
 
-  bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
-  await bot.sendDocument(CHANNEL_NAME, pdfUrl);
+  bot
+    .sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' })
+    .then(() => {
+      bot.sendDocument(CHANNEL_NAME, pdfUrl);
+    });
 })();
