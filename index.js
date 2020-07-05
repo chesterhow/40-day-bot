@@ -6,14 +6,10 @@ const URL = 'https://lovesingapore.org.sg/40day/2020/';
 // const CHANNEL_NAME = '@fortyday2020';
 const CHANNEL_NAME = '@chestestchannel';
 
-(async () => {
+async function run() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.goto(URL);
-  await page._client.send('Page.setDownloadBehavior', {
-    behavior: 'allow',
-    downloadPath: './',
-  });
 
   const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
     a.getAttribute('href')
@@ -36,6 +32,14 @@ const CHANNEL_NAME = '@chestestchannel';
   bot
     .sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' })
     .then(() => {
-      bot.sendDocument(CHANNEL_NAME, pdfUrl);
+      console.log('Sent message');
+      bot.sendDocument(CHANNEL_NAME, pdfUrl).then(() => {
+        console.log('Sent PDF');
+        process.exit(0);
+      });
     });
-})();
+}
+
+run().catch((e) => {
+  console.log(e);
+});
