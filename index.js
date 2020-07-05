@@ -7,7 +7,7 @@ const URL = 'https://lovesingapore.org.sg/40day/2020/';
 const CHANNEL_NAME = '@chestestchannel';
 
 (async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
   await page.goto(URL);
   await page._client.send('Page.setDownloadBehavior', {
