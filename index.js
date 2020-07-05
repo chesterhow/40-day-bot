@@ -23,6 +23,7 @@ async function run() {
     );
     const month = currDate.toLocaleString('default', { month: 'long' });
     const day = currDate.getDate();
+    console.log(currDate.getHours());
 
     return `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, 2020 (Day ${daysDiff})</i>\n${URL}${month.toLowerCase()}-${day}`;
   };
