@@ -10,9 +10,12 @@ async function run() {
   const page = await browser.newPage();
 
   const currDate = new Date();
-  const year = currDate.getFullYear();
-  const month = currDate.toLocaleString('default', { month: 'long' });
-  const day = currDate.getDate();
+  // const year = currDate.getFullYear();
+  // const month = currDate.toLocaleString('default', { month: 'long' });
+  // const day = currDate.getDate();
+  const year = 2020;
+  const month = 'july';
+  const day = 5;
 
   const URL = `https://lovesingapore.org.sg/40day/${year}/${month.toLowerCase()}-${day}`;
   await page.goto(URL);
