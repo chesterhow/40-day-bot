@@ -16,11 +16,14 @@ async function run() {
 
   const year = 2020;
   const month = 7;
-  const day = 9;
+  const day = 7;
 
-  // Exit if not July or past August 9
-  if (month !== 6 || (month === 7 && day > 9)) {
-    return;
+  // Exit if not July or past 9th August
+  if (month !== 6) {
+    if (month !== 7 || (month === 7 && day > 9)) {
+      console.log(year, month, day, 'Not in range');
+      process.exit(0);
+    }
   }
 
   // const monthString = currDate.toLocaleString('default', { month: 'long' });
