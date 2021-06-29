@@ -2,21 +2,16 @@ require('dotenv').config();
 const { Telegram } = require('telegraf');
 const puppeteer = require('puppeteer');
 
-// const CHANNEL_NAME = '@fortydaySG';
-const CHANNEL_NAME = '@chestestchannel';
+const CHANNEL_NAME = '@fortydaySG';
 
 async function run() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
 
   const currDate = new Date();
-  // const year = currDate.getFullYear();
-  // const month = currDate.getMonth();
-  // const day = currDate.getDate();
-
-  const year = 2020;
-  const month = 7;
-  const day = 7;
+  const year = currDate.getFullYear();
+  const month = currDate.getMonth();
+  const day = currDate.getDate();
 
   // Exit if not July or past 9th August
   if (month !== 6) {
@@ -26,8 +21,7 @@ async function run() {
     }
   }
 
-  // const monthString = currDate.toLocaleString('default', { month: 'long' });
-  const monthString = 'August';
+  const monthString = currDate.toLocaleString('default', { month: 'long' });
 
   const URL = `https://lovesingapore.org.sg/40day/${year}/${monthString.toLowerCase()}-${day}`;
   await page.goto(URL);
