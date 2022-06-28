@@ -15,10 +15,10 @@ async function run() {
   const day = currDate.getDate();
 
   // Guard: Exit if before July or after 9th August
-  if (month < 6 || (month === 7 && day > 9) || month > 7) {
-    console.log(year, month, day, 'Not in range');
-    process.exit(0);
-  }
+  // if (month < 6 || (month === 7 && day > 9) || month > 7) {
+  //   console.log(year, month, day, 'Not in range');
+  //   process.exit(0);
+  // }
 
   const monthString = currDate.toLocaleString('default', { month: 'long' });
 
