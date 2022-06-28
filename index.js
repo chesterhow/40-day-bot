@@ -15,19 +15,19 @@ async function run() {
   const day = currDate.getDate();
 
   // Guard: Exit if before July or after 9th August
-  // if (month < 6 || (month === 7 && day > 9) || month > 7) {
-  //   console.log(year, month, day, 'Not in range');
-  //   process.exit(0);
-  // }
+  if (month < 6 || (month === 7 && day > 9) || month > 7) {
+    console.log(year, month, day, 'Not in range');
+    process.exit(0);
+  }
 
   const monthString = currDate.toLocaleString('default', { month: 'long' });
 
   const URL = `https://lovesingapore.org.sg/40day/${year}/${monthString.toLowerCase()}-${day}`;
   await page.goto(URL);
 
-  // const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
-  //   a.getAttribute('href')
-  // );
+  const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
+    a.getAttribute('href')
+  );
 
   const getMessage = () => {
     const startDate = new Date(year, 6, 1); // 1 JULY XXXX
@@ -43,8 +43,8 @@ async function run() {
   await bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
   console.log('Sent message');
 
-  // await bot.sendDocument(CHANNEL_NAME, pdfUrl);
-  // console.log('Sent PDF');
+  await bot.sendDocument(CHANNEL_NAME, pdfUrl);
+  console.log('Sent PDF');
   process.exit(0);
 }
 
