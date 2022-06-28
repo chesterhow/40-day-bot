@@ -2,7 +2,8 @@ require('dotenv').config();
 const { Telegram } = require('telegraf');
 const puppeteer = require('puppeteer');
 
-const CHANNEL_NAME = '@fortydaySG';
+// const CHANNEL_NAME = '@fortydaySG';
+const CHANNEL_NAME = '@chestestchannel';
 
 async function run() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
@@ -24,9 +25,9 @@ async function run() {
   const URL = `https://lovesingapore.org.sg/40day/${year}/${monthString.toLowerCase()}-${day}`;
   await page.goto(URL);
 
-  const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
-    a.getAttribute('href')
-  );
+  // const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
+  //   a.getAttribute('href')
+  // );
 
   const getMessage = () => {
     const startDate = new Date(year, 6, 1); // 1 JULY XXXX
@@ -37,13 +38,13 @@ async function run() {
     return `📆 <b>Today's Prayer Guide</b> - <i>${monthString} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
   };
 
-  const bot = new Telegram(process.env.BOT_TOKEN);
+  const bot = new Telegram(process.env.TEST_BOT_TOKEN);
 
   await bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
   console.log('Sent message');
 
-  await bot.sendDocument(CHANNEL_NAME, pdfUrl);
-  console.log('Sent PDF');
+  // await bot.sendDocument(CHANNEL_NAME, pdfUrl);
+  // console.log('Sent PDF');
   process.exit(0);
 }
 
