@@ -13,12 +13,10 @@ async function run() {
   const month = currDate.getMonth();
   const day = currDate.getDate();
 
-  // Exit if not July or past 9th August
-  if (month !== 6) {
-    if (month !== 7 || (month === 7 && day > 9)) {
-      console.log(year, month, day, 'Not in range');
-      process.exit(0);
-    }
+  // Guard: Exit if before July or after 9th August
+  if (month < 6 || (month === 7 && day > 9) || month > 7) {
+    console.log(year, month, day, 'Not in range');
+    process.exit(0);
   }
 
   const monthString = currDate.toLocaleString('default', { month: 'long' });
@@ -41,15 +39,12 @@ async function run() {
 
   const bot = new Telegram(process.env.BOT_TOKEN);
 
-  bot
-    .sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' })
-    .then(() => {
-      console.log('Sent message');
-      bot.sendDocument(CHANNEL_NAME, pdfUrl).then(() => {
-        console.log('Sent PDF');
-        process.exit(0);
-      });
-    });
+  await bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
+  console.log('Sent message');
+
+  await bot.sendDocument(CHANNEL_NAME, pdfUrl);
+  console.log('Sent PDF');
+  process.exit(0);
 }
 
 run().catch((e) => {
