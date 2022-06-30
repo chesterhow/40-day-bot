@@ -2,8 +2,7 @@ require('dotenv').config();
 const { Telegram } = require('telegraf');
 const puppeteer = require('puppeteer');
 
-// const CHANNEL_NAME = '@fortydaySG';
-const CHANNEL_NAME = '@chestestchannel';
+const CHANNEL_NAME = '@fortydaySG';
 
 async function run() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
@@ -38,7 +37,7 @@ async function run() {
     return `📆 <b>Today's Prayer Guide</b> - <i>${monthString} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
   };
 
-  const bot = new Telegram(process.env.TEST_BOT_TOKEN);
+  const bot = new Telegram(process.env.BOT_TOKEN);
 
   await bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
   console.log('Sent message');
