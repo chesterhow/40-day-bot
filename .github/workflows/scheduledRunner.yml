@@ -1,9 +1,9 @@
-name: Run script (prod)
+name: 'Run script (prod)'
 
 on:
   schedule:
     # Every day at 2200 UTC (0600 SGT)
-    - cron: 0 22 * * *
+    - cron: '0 22 * * *'
 
   workflow_dispatch:
 

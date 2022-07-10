@@ -1,4 +1,4 @@
-name: Run script (dev)
+name: 'Run script (dev)'
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - master
 
   schedule:
-    # Every day at 1605 UTC (0005 SGT)
-    - cron: 5 16 * * *
+    # Every day at 1625 UTC (0025 SGT)
+    - cron: '25 16 * * *'
 
   workflow_dispatch:
 
