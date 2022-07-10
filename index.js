@@ -1,49 +1,54 @@
 require('dotenv').config();
+const { DateTime, Interval } = require('luxon');
 const { Telegram } = require('telegraf');
 const puppeteer = require('puppeteer');
 
-const CHANNEL_NAME = '@fortydaySG';
+const { CHANNEL_NAME, BOT_TOKEN } = process.env;
 
 async function run() {
-  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
-  const page = await browser.newPage();
+  // Retrieve current date data.
+  const currDate = DateTime.now().setZone('Asia/Singapore');
+  const year = currDate.year;
+  const month = currDate.monthLong;
+  const day = currDate.day;
 
-  const currDate = new Date();
-  const year = currDate.getFullYear();
-  const month = currDate.getMonth();
-  const day = currDate.getDate();
+  const startDate = DateTime.fromObject({ month: 7, day: 1 }).setZone(
+    'Asia/Singapore'
+  );
+  const endDate = DateTime.fromObject({ month: 8, day: 10 }).setZone(
+    'Asia/Singapore'
+  );
 
-  // Guard: Exit if before July or after 9th August
-  if (month < 6 || (month === 7 && day > 9) || month > 7) {
-    console.log(year, month, day, 'Not in range');
+  // Guard: Exit if date is not in interval.
+  if (!Interval.fromDateTimes(startDate, endDate).contains(currDate)) {
+    console.log(currDate.toString(), 'Not in range');
     process.exit(0);
   }
 
-  const monthString = currDate.toLocaleString('default', { month: 'long' });
+  // Scrape PDF url.
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+  const page = await browser.newPage();
 
-  const URL = `https://lovesingapore.org.sg/40day/${year}/${monthString.toLowerCase()}-${day}`;
+  const URL = `https://lovesingapore.org.sg/40day/${year}/${month.toLowerCase()}-${day}`;
   await page.goto(URL);
 
   const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
     a.getAttribute('href')
   );
 
-  const getMessage = () => {
-    const startDate = new Date(year, 6, 1); // 1 JULY XXXX
-    const daysDiff = Math.ceil(
-      (currDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
-    );
+  // Send messages.
+  const bot = new Telegram(BOT_TOKEN);
 
-    return `📆 <b>Today's Prayer Guide</b> - <i>${monthString} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
-  };
+  const diff = currDate.diff(startDate, ['days']);
+  const daysDiff = Math.ceil(diff.days);
+  const message = `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
 
-  const bot = new Telegram(process.env.BOT_TOKEN);
-
-  await bot.sendMessage(CHANNEL_NAME, getMessage(), { parse_mode: 'HTML' });
+  await bot.sendMessage(CHANNEL_NAME, message, { parse_mode: 'HTML' });
   console.log('Sent message');
 
   await bot.sendDocument(CHANNEL_NAME, pdfUrl);
   console.log('Sent PDF');
+
   process.exit(0);
 }
 

@@ -1,0 +1,25 @@
+name: Run script (prod)
+
+on:
+  schedule:
+    # Every day at 2200 UTC (0600 SGT)
+    - cron: 0 22 * * *
+
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run script
+        run: yarn start
+        env:
+          NODE_ENV: production
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHANNEL_NAME: ${{ secrets.CHANNEL_NAME }}
