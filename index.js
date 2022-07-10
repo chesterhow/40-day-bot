@@ -19,6 +19,7 @@ async function run() {
   const endDate = DateTime.fromObject({ month: 8, day: 10 }).setZone(
     'Asia/Singapore'
   );
+  console.log('Start Date:', startDate);
 
   // Guard: Exit if date is not in interval.
   if (!Interval.fromDateTimes(startDate, endDate).contains(currDate)) {
@@ -43,7 +44,7 @@ async function run() {
   const diff = currDate.diff(startDate, ['days']);
   const daysDiff = Math.ceil(diff.days);
   const message = `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
-  console.log('Days diff:', daysDiff);
+  console.log('Days diff:', daysDiff, diff.days);
 
   await bot.sendMessage(CHANNEL_NAME, message, { parse_mode: 'HTML' });
   console.log('Sent message');
