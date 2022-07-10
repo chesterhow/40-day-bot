@@ -24,6 +24,5 @@ jobs:
       - name: Run script
         run: yarn start
         env:
-          NODE_ENV: production
           BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
           CHANNEL_NAME: ${{ secrets.TEST_CHANNEL_NAME }}
