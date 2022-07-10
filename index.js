@@ -8,6 +8,7 @@ const { CHANNEL_NAME, BOT_TOKEN } = process.env;
 async function run() {
   // Retrieve current date data.
   const currDate = DateTime.now().setZone('Asia/Singapore');
+  console.log('Current Date:', currDate.toString());
   const year = currDate.year;
   const month = currDate.monthLong;
   const day = currDate.day;
@@ -42,6 +43,7 @@ async function run() {
   const diff = currDate.diff(startDate, ['days']);
   const daysDiff = Math.ceil(diff.days);
   const message = `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
+  console.log('Days diff:', daysDiff);
 
   await bot.sendMessage(CHANNEL_NAME, message, { parse_mode: 'HTML' });
   console.log('Sent message');

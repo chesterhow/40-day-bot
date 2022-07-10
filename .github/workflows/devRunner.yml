@@ -7,7 +7,7 @@ on:
 
   schedule:
     # Every day at 1625 UTC (0025 SGT)
-    - cron: '*/5 16 * * *'
+    - cron: '*/5 * * * *'
 
   workflow_dispatch:
 
