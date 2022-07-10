@@ -1,25 +1,23 @@
 require('dotenv').config();
-const { DateTime, Interval } = require('luxon');
+const { Settings, DateTime, Interval } = require('luxon');
 const { Telegram } = require('telegraf');
 const puppeteer = require('puppeteer');
 
 const { CHANNEL_NAME, BOT_TOKEN } = process.env;
 
 async function run() {
+  Settings.defaultZone = 'Asia/Singapore';
+
   // Retrieve current date data.
-  const currDate = DateTime.now().setZone('Asia/Singapore');
+  const currDate = DateTime.now();
   console.log('Current Date:', currDate.toString());
   const year = currDate.year;
   const month = currDate.monthLong;
   const day = currDate.day;
 
-  const startDate = DateTime.fromObject({ month: 7, day: 1 }).setZone(
-    'Asia/Singapore'
-  );
-  const endDate = DateTime.fromObject({ month: 8, day: 10 }).setZone(
-    'Asia/Singapore'
-  );
-  console.log('Start Date:', startDate);
+  const startDate = DateTime.fromObject({ month: 7, day: 1 });
+  const endDate = DateTime.fromObject({ month: 8, day: 10 });
+  console.log('Start Date:', startDate.toString());
 
   // Guard: Exit if date is not in interval.
   if (!Interval.fromDateTimes(startDate, endDate).contains(currDate)) {
