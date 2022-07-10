@@ -2,7 +2,7 @@ name: 'Run script (prod)'
 
 on:
   schedule:
-    - cron: '0 22 * * *' # Every day at 2200 UTC (0600 SGT)
+    - cron: '57 21 * * *' # Every day at 2157 UTC (0557 SGT)
 
   workflow_dispatch:
 
