@@ -5,8 +5,8 @@ on:
     branches:
       - master
 
-  schedule:
-    - cron: '5 16 * * *' # Every day at 1605 UTC (0005 SGT)
+  # schedule:
+  #   - cron: '5 16 * * *' # Every day at 1605 UTC (0005 SGT)
 
   workflow_dispatch:
 
@@ -20,8 +20,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Build
+        run: yarn build
+
       - name: Run script
-        run: yarn dev:start
+        run: yarn dev:run
         env:
           TEST_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
           TEST_CHANNEL_NAME: ${{ secrets.TEST_CHANNEL_NAME }}
