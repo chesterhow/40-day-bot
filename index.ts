@@ -3,7 +3,14 @@ import { Settings, DateTime, Interval } from 'luxon';
 import { Telegram } from 'telegraf';
 import puppeteer from 'puppeteer';
 
-const { CHANNEL_NAME, BOT_TOKEN } = process.env;
+const isProduction = process.env.NODE_ENV === 'production';
+const CHANNEL_NAME = isProduction
+  ? process.env.CHANNEL_NAME
+  : process.env.TEST_CHANNEL_NAME;
+const BOT_TOKEN = isProduction
+  ? process.env.BOT_TOKEN
+  : process.env.TEST_BOT_TOKEN;
+
 Settings.defaultZone = 'Asia/Singapore';
 
 async function run() {

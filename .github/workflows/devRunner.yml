@@ -21,7 +21,7 @@ jobs:
         run: yarn install
 
       - name: Run script
-        run: yarn start
+        run: yarn dev:start
         env:
-          BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
-          CHANNEL_NAME: ${{ secrets.TEST_CHANNEL_NAME }}
+          TEST_BOT_TOKEN: ${{ secrets.TEST_BOT_TOKEN }}
+          TEST_CHANNEL_NAME: ${{ secrets.TEST_CHANNEL_NAME }}

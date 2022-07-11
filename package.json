@@ -23,6 +23,7 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "NODE_ENV=production ts-node index.ts",
+    "dev:start": "NODE_ENV=development ts-node index.ts"
   }
 }
