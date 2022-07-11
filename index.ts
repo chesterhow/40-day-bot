@@ -1,13 +1,12 @@
-require('dotenv').config();
-const { Settings, DateTime, Interval } = require('luxon');
-const { Telegram } = require('telegraf');
-const puppeteer = require('puppeteer');
+import 'dotenv/config';
+import { Settings, DateTime, Interval } from 'luxon';
+import { Telegram } from 'telegraf';
+import puppeteer from 'puppeteer';
 
 const { CHANNEL_NAME, BOT_TOKEN } = process.env;
+Settings.defaultZone = 'Asia/Singapore';
 
 async function run() {
-  Settings.defaultZone = 'Asia/Singapore';
-
   // Retrieve current date data.
   const currDate = DateTime.now();
   console.log('Current Date:', currDate.toString());
@@ -21,8 +20,7 @@ async function run() {
 
   // Guard: Exit if date is not in interval.
   if (!Interval.fromDateTimes(startDate, endDate).contains(currDate)) {
-    console.log(currDate.toString(), 'Not in range');
-    process.exit(0);
+    throw new Error(`Current date is not in range ${currDate.toString()}`);
   }
 
   // Scrape PDF url.
@@ -36,13 +34,25 @@ async function run() {
     a.getAttribute('href')
   );
 
+  if (pdfUrl === null) {
+    throw new Error('Could not retrieve PDF url');
+  }
+
   // Send messages.
+  if (BOT_TOKEN === undefined) {
+    throw new Error('No BOT_TOKEN provided');
+  }
+
   const bot = new Telegram(BOT_TOKEN);
 
   const diff = currDate.diff(startDate, ['days']);
   const daysDiff = Math.ceil(diff.days);
   const message = `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
   console.log('Days diff:', daysDiff, diff.days);
+
+  if (CHANNEL_NAME === undefined) {
+    throw new Error('No CHANNEL_NAME provided');
+  }
 
   await bot.sendMessage(CHANNEL_NAME, message, { parse_mode: 'HTML' });
   console.log('Sent message');
@@ -54,5 +64,6 @@ async function run() {
 }
 
 run().catch((e) => {
-  console.log(e);
+  console.error(e);
+  process.exit(0);
 });
