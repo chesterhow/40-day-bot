@@ -20,7 +20,7 @@ jobs:
         run: yarn build
 
       - name: Run script
-        run: yarn run
+        run: yarn start
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHANNEL_NAME: ${{ secrets.CHANNEL_NAME }}
