@@ -25,6 +25,9 @@ async function run() {
   const endDate = DateTime.fromObject({ month: 8, day: 10 });
   console.log('Start Date:', startDate.toString());
 
+  const diff = currDate.diff(startDate, ['days']);
+  const daysDiff = Math.ceil(diff.days);
+
   // Guard: Exit if date is not in interval.
   if (!Interval.fromDateTimes(startDate, endDate).contains(currDate)) {
     throw new Error(`Current date is not in range ${currDate.toString()}`);
@@ -34,10 +37,22 @@ async function run() {
   const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
 
-  const URL = `https://lovesingapore.org.sg/40day/${year}/${month.toLowerCase()}-${day}`;
+  // const URL = `https://lovesingapore.org.sg/40day/${year}/${month.toLowerCase()}-${day}`;
+  const URL = `https://lovesingapore.org.sg/day-${daysDiff}`;
   await page.goto(URL);
 
-  const pdfUrl = await page.$eval('.et_pb_text_inner > a', (a) =>
+  const elementHandle = await page.waitForSelector('div.video-embed iframe');
+  const frame = await elementHandle?.contentFrame();
+
+  const videoUrl = await frame?.$eval('.ytp-impression-link', (a) =>
+    a.getAttribute('href')
+  );
+
+  if (typeof videoUrl !== 'string') {
+    throw new Error('Could not retrieve video url');
+  }
+
+  const pdfUrl = await page.$eval('#article-post > div > p a', (a) =>
     a.getAttribute('href')
   );
 
@@ -52,9 +67,9 @@ async function run() {
 
   const bot = new Telegram(BOT_TOKEN);
 
-  const diff = currDate.diff(startDate, ['days']);
-  const daysDiff = Math.ceil(diff.days);
-  const message = `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, ${year} (Day ${daysDiff})</i>\n${URL}`;
+  const message = `📆 <b>Today's Prayer Guide</b> - <i>${month} ${day}, ${year} (Day ${daysDiff})</i>\n\nArticle: ${URL}\n\nVideo: ${
+    videoUrl.split('&')[0]
+  }`;
   console.log('Days diff:', daysDiff, diff.days);
 
   if (CHANNEL_NAME === undefined) {
